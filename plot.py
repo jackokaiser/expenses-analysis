@@ -29,9 +29,14 @@ if __name__ == "__main__":
     print(categories)
     print(f'total cost: {total_cost}€')
 
-    fig, axs = plt.subplots(1, 2, figsize=[20, 9])
+    legend_loc = {'loc': 'center left', 'bbox_to_anchor': (1.0, 0.5)}
+    height = 7
+    fig, axs = plt.subplots(1, 2, figsize=[1.618 * height, height])
     fig.suptitle(f'Expenses from {from_date} to {to_date} (total {total_cost}€)', fontsize=16)
-    categories.plot.pie(y='Cost', ax=axs[0])
-    categories.plot.bar(y='Cost', ax=axs[1], rot=60)
+
+    cost_series = categories[(categories['Cost'] / total_cost) >= 0.01]['Cost']
+    cost_series.plot.pie(y='Cost', ax=axs[0], legend=False)
+    cost_series.plot.bar(y='Cost', ax=axs[1], rot=60)
+    plt.tight_layout()
 
     fig.savefig('expenses.png')
